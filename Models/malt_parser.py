@@ -14,7 +14,7 @@ def handle_splitting_xebus(tokens):
 
 
 def tokenize(str):
-    tokens = ViTokenizer.tokenize(str).lower().split()
+    tokens = ViTokenizer.tokenize(str).split()
     tokens = handle_splitting_xebus(tokens)
     return tokens
 
@@ -50,7 +50,7 @@ class MaltParser():
                 map(lambda x: x.lower(), self.my_lexicals[token_type]))
             if word.lower() in token_type_list:
                 return token_type
-        if re.search("\d{3,4}hr", word):
+        if re.search("\d{3,4}hr", word.lower()):
             return "time"
         elif word == ROOT:
             return ROOT
