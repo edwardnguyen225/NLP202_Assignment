@@ -10,26 +10,29 @@ def handle_splitting_xebus(tokens):
     return tokens
 
 
+def tokenize(str):
+    tokens = ViTokenizer.tokenize(str).lower().split()
+    tokens = handle_splitting_xebus(tokens)
+    return tokens
+
+
 class MaltParser():
     def __init__(self, str, my_lexicals, rules):
         self.str = str
         self.my_lexicals = my_lexicals
         self.rules = rules
+        self.tokens = tokenize(self.str)
+        self.malt = {}
+
+    def parse(self):
+        tokens_type = list(
+            map(lambda x: self.get_token_type(x), self.tokens))
 
     def get_malt(self):
-        malt = {}
-        tokens = self.get_tokens()
-        tokens_type = list(
-            map(lambda x: self.get_token_type(x), tokens))
-        print(tokens)
-        print(tokens_type)
-
-        return malt
+        return self.malt
 
     def get_tokens(self):
-        tokens = ViTokenizer.tokenize(self.str).lower().split()
-        tokens = handle_splitting_xebus(tokens)
-        return tokens
+        return self.tokens
 
     def get_token_type(self, word):
         for token_type in self.my_lexicals:
