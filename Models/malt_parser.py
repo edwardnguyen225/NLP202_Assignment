@@ -7,9 +7,7 @@ def malt_parser(str, my_lexicals, rules):
     malt = {}
     sentence = copy(str)
     tokens = ViTokenizer.tokenize(sentence).lower().split()
-    print(tokens)
-    handle_splitting_xebus(tokens)
-    print(tokens)
+    tokens = handle_splitting_xebus(tokens)
 
     return malt
 
