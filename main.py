@@ -61,8 +61,9 @@ def main(question):
     print("Your question: " + question)
     # ================= Malt Parser - Dependencies =================
     question = preprocess(question)
-    malt = malt_parser(question, my_lexicals, dependency_relations)
-    print(malt)
+    malt = MaltParser(question, my_lexicals, dependency_relations)
+    malt_result = malt.get_malt()
+    print(malt_result)
 
 
 if __name__ == "__main__":
