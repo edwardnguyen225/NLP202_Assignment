@@ -16,7 +16,7 @@ REDUNDANT_TOKENS = [".", ",", "?", ":"]
 
 my_lexicals = {
     "bus": ["bus", "buýt", "xe_bus", "xe_buýt", "xe"],
-    "city": ["city", "thành_phố", "tỉnh"],
+    "city-prefix": ["city", "thành_phố", "tỉnh"],
     "arrive": ["đến", "tới"],
     "from": ["từ"],
     "wh": ["nào"],
@@ -62,6 +62,7 @@ def main(question):
     # ================= Malt Parser - Dependencies =================
     question = preprocess(question)
     malt = MaltParser(question, my_lexicals, dependency_relations)
+    malt.parse()
     malt_result = malt.get_malt()
     print(malt_result)
 
