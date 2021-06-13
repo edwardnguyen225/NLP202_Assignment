@@ -9,7 +9,6 @@ DEFAULT_QUESTIONS = [
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?",
     "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?",
     "Xe bus nào đến thành phố Hồ Chí Minh ?",
-    "xe bus nối đuôi sau xe bus"
 ]
 
 REDUNDANT_TOKENS = [".", ",", "?", ":"]
