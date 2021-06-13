@@ -9,6 +9,7 @@ DEFAULT_QUESTIONS = [
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?",
     "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?",
     "Xe bus nào đến thành phố Hồ Chí Minh ?",
+    "Xe bus nào đến thành phố Hồ Chí Minh lúc 20:00HR ?"
 ]
 
 REDUNDANT_TOKENS = [".", ",", "?", ":"]
@@ -22,7 +23,8 @@ my_lexicals = {
     "dtime": ["lúc", "từ_lúc"],
     "atime": ["lúc", "vào_lúc"],
     "runtime": ["thời_gian"],
-    "name": ["B1", "B2", "B3", "B4", "B5", "B6", "hue", "hcm", "hn", "danang", "hồ_chi_minh", "hà_nội", "huế", "đà_nẵng"],
+    "busname": ["B1", "B2", "B3", "B4", "B5", "B6"],
+    "cityname": ["hue", "hcm", "hn", "danang", "hồ_chí_minh", "hà_nội", "huế", "đà_nẵng"],
     "time": ["time"]
 }
 
