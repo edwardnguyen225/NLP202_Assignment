@@ -16,7 +16,7 @@ REDUNDANT_TOKENS = [".", ",", "?", ":"]
 
 my_lexicals = {
     "bus": ["bus", "buýt", "xe_bus", "xe_buýt", "xe"],
-    "city-prefix": ["city", "thành_phố", "tỉnh"],
+    "city": ["city", "thành_phố", "tỉnh"],
     "arrive": ["đến", "tới"],
     "from": ["từ"],
     "wh": ["nào"],
@@ -28,18 +28,27 @@ my_lexicals = {
     "time": ["time"]
 }
 
+# dependency from left --> right
 dependency_relations = {
-    "bus": {},
-    "city": {},
-    "arrive": {},
-    "from": {},
-    "wh": {},
-    "dtime": {},
-    "atime": {},
-    "runtime": {},
-    "busname": {},
-    "cityname": {},
-    "time": {}
+    "PRED": [("<ROOT>", "arrive")],
+    "LSUBJ": [("arrive", "bus")],
+    "PREP": [("arrive", "from")],
+    "FROM-TIME": [
+        ("from", "dtime"),
+        ("dtime", "time")],
+    "TO-TIME": [("atime", "time")],
+    "PREP-TIME": [("arrive", "atime")],
+    "FROM-LOC": [("from", "city")],
+    "TO-LOC": [("arrive", "city")],
+    "CITY": [("city", "cityname")],
+    "BUS-NAME": [("busname", "bus")],
+    "WH-BUS": [("bus", "wh")],
+    "WH-RUN-TIME": [
+        ("arrive", "runtime"),
+        ("runtime", "wh")],
+    "WH-FROM-TIME": [("dtime", "wh")],
+    "WH-TO-TIME": [("atime", "wh")],
+    "WH-CITY": [("city", "wh")],
 }
 
 
