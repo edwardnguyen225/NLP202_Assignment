@@ -1,17 +1,5 @@
-from posixpath import lexists
 import re
-from copy import copy
 from pyvi import ViTokenizer
-
-
-def malt_parser(str, my_lexicals, rules):
-    malt = {}
-    sentence = copy(str)
-    tokens = ViTokenizer.tokenize(sentence).lower().split()
-    tokens = handle_splitting_xebus(tokens)
-    tokens_type = list(map(lambda x: get_token_type(x, my_lexicals), tokens))
-
-    return malt
 
 
 def handle_splitting_xebus(tokens):
@@ -22,12 +10,33 @@ def handle_splitting_xebus(tokens):
     return tokens
 
 
-def get_token_type(word, my_lexicals):
-    for token_type in my_lexicals:
-        token_type_list = list(
-            map(lambda x: x.lower(), my_lexicals[token_type]))
-        if word.lower() in token_type_list:
-            return token_type
-    if re.search("\d{3,4}hr", word):
-        return "time"
-    return None
+class MaltParser():
+    def __init__(self, str, my_lexicals, rules):
+        self.str = str
+        self.my_lexicals = my_lexicals
+        self.rules = rules
+
+    def get_malt(self):
+        malt = {}
+        tokens = self.get_tokens()
+        tokens_type = list(
+            map(lambda x: self.get_token_type(x), tokens))
+        print(tokens)
+        print(tokens_type)
+
+        return malt
+
+    def get_tokens(self):
+        tokens = ViTokenizer.tokenize(self.str).lower().split()
+        tokens = handle_splitting_xebus(tokens)
+        return tokens
+
+    def get_token_type(self, word):
+        for token_type in self.my_lexicals:
+            token_type_list = list(
+                map(lambda x: x.lower(), self.my_lexicals[token_type]))
+            if word.lower() in token_type_list:
+                return token_type
+        if re.search("\d{3,4}hr", word):
+            return "time"
+        return None
