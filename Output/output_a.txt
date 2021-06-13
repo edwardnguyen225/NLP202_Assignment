@@ -1,0 +1,7 @@
+(Xe_bus, nào): WH-BUS
+(đến, Xe_bus): LSUBJ
+(<ROOT>, đến): PRED
+(đến, thành_phố): TO-LOC
+(thành_phố, Huế): CITY
+(đến, lúc): PREP-TIME
+(lúc, 2000HR): TO-TIME
