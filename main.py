@@ -1,9 +1,10 @@
+import os
 import sys
 import random
-import Models.file_manipulator
 
 from copy import copy
 from Models.malt_parser import *
+from Models.file_manipulator import *
 
 DEFAULT_QUESTIONS = [
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?",
@@ -14,14 +15,24 @@ DEFAULT_QUESTIONS = [
 
 REDUNDANT_TOKENS = [".", ",", "?", ":"]
 
+PATH_TO_OUTPUT = os.path.join(".", "Output")
+PATH_TO_OUTPUT_FILES = {
+    "a": os.path.join(PATH_TO_OUTPUT, "output_a.txt"),
+    "b": os.path.join(PATH_TO_OUTPUT, "output_b.txt"),
+    "c": os.path.join(PATH_TO_OUTPUT, "output_c.txt"),
+    "d": os.path.join(PATH_TO_OUTPUT, "output_d.txt"),
+    "e": os.path.join(PATH_TO_OUTPUT, "output_e.txt"),
+    "f": os.path.join(PATH_TO_OUTPUT, "output_f.txt"),
+}
+
 my_lexicals = {
     "bus": ["bus", "buýt", "xe_bus", "xe_buýt", "xe"],
     "city": ["city", "thành_phố", "tỉnh"],
     "arrive": ["đến", "tới"],
     "from": ["từ"],
     "wh": ["nào"],
-    "dtime": ["lúc", "từ_lúc"],
     "atime": ["lúc", "vào_lúc"],
+    "dtime": ["lúc", "từ_lúc"],
     "runtime": ["thời_gian"],
     "busname": ["B1", "B2", "B3", "B4", "B5", "B6"],
     "cityname": ["hue", "hcm", "hn", "danang", "hồ_chí_minh", "hà_nội", "huế", "đà_nẵng"],
@@ -34,7 +45,7 @@ dependency_relations = {
     "LSUBJ": [("arrive", "bus")],
     "PREP": [("arrive", "from")],
     "FROM-TIME": [
-        ("from", "dtime"),
+        ("from", "time"),
         ("dtime", "time")],
     "TO-TIME": [("atime", "time")],
     "PREP-TIME": [("arrive", "atime")],
@@ -74,10 +85,13 @@ def main(question):
     malt.parse()
     malt_result = malt.get_malt()
     print(malt_result)
+    write_malt_to_file(PATH_TO_OUTPUT_FILES["a"], malt_result)
 
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
     question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
+
+    question = "Xe bus nào đến thành phố Huế lúc 20:00HR ?"
 
     main(question)
