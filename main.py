@@ -28,7 +28,19 @@ my_lexicals = {
     "time": ["time"]
 }
 
-dependencies = []
+dependencies = {
+    "bus": {},
+    "city": {},
+    "arrive": {},
+    "from": {},
+    "wh": {},
+    "dtime": {},
+    "atime": {},
+    "runtime": {},
+    "busname": {},
+    "cityname": {},
+    "time": {}
+}
 
 
 def remove_redundant(str):
