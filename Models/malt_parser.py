@@ -11,8 +11,8 @@ SHIFT = "SHIFT"
 
 def handle_splitting_xebus(tokens):
     for i in range(len(tokens) - 2):
-        if tokens[i] == "xe" and tokens[i+1] == "bus":
-            tokens[i] = "xe_bus"
+        if tokens[i].lower() == "xe" and tokens[i+1] == "bus":
+            tokens[i] += "_bus"
             tokens.pop(i+1)
     return tokens
 
@@ -36,7 +36,7 @@ class MaltParser():
         self.buffer = self.tokens
         self.malt = {}
 
-        # count = 0
+        count = 0
         # print(self.buffer)
         tokens_type = list(map(lambda x: self.get_token_type(x), self.buffer))
         # print((tokens_type))
@@ -55,7 +55,7 @@ class MaltParser():
             # print(left_type, right_type, "=>", action, relation)
             # print(self.buffer)
             # print(self.stack)
-            # count += 1
+            count += 1
 
         del self.stack
         del self.buffer
@@ -81,6 +81,16 @@ class MaltParser():
         return None
 
     def get_action_and_relation(self):
+        exist_relation_stack_top2 = False
+        relations = self.malt.keys()
+        if len(self.stack) > 1:
+            stack_head = self.stack[-1]
+            stack_head_under = self.stack[-2]
+            pair = (stack_head, stack_head_under)
+            pair_reverse = (stack_head_under, stack_head)
+            if pair in relations or pair_reverse in relations:
+                exist_relation_stack_top2 = True
+
         # stack head
         left = self.stack[-1]
         left_type = self.get_token_type(left)
@@ -97,24 +107,15 @@ class MaltParser():
                     (left, right): relation_name
                 }
                 return (RIGHTARC, relation_result)
-            elif (right_type, left_type) in relation_list:
+            elif (right_type, left_type) in relation_list and not exist_relation_stack_top2:
                 relation_result = {
                     (right, left): relation_name
                 }
                 return (LEFTARC, relation_result)
 
         # Checking whether REDUCE or SHIFT
-        if len(self.buffer) == 0:
+        if len(self.buffer) == 0 or exist_relation_stack_top2:
             return (REDUCE, None)
-
-        relations = self.malt.keys()
-        if len(self.stack) > 1:
-            stack_head = self.stack[-1]
-            stack_head_under = self.stack[-2]
-            pair = (stack_head, stack_head_under)
-            pair_reverse = (stack_head_under, stack_head)
-            if pair in relations or pair_reverse in relations:
-                return(REDUCE, None)
 
         return (SHIFT, None)
 

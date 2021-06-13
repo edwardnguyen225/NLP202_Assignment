@@ -10,7 +10,9 @@ DEFAULT_QUESTIONS = [
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?",
     "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?",
     "Xe bus nào đến thành phố Hồ Chí Minh ?",
-    "Xe bus nào đến thành phố Hồ Chí Minh lúc 20:00HR ?"
+    "Xe bus nào đến thành phố Hồ Chí Minh lúc 20:00HR ?",
+    "Xe bus B3 từ Đà Nẵng lúc 2030HR đến thành phố nào ?",
+    "Xe bus B3 từ Đà Nẵng đến Huế lúc nào ?"
 ]
 
 REDUNDANT_TOKENS = [".", ",", "?", ":"]
@@ -27,10 +29,11 @@ PATH_TO_OUTPUT_FILES = {
 
 my_lexicals = {
     "bus": ["bus", "buýt", "xe_bus", "xe_buýt", "xe"],
-    "city": ["city", "thành_phố", "tỉnh"],
+    "city": ["thành_phố", "tỉnh"],
     "arrive": ["đến", "tới"],
     "from": ["từ"],
     "wh": ["nào"],
+    "whtime": ["lúc_nào"],
     "atime": ["lúc", "vào_lúc"],
     "dtime": ["lúc", "từ_lúc"],
     "runtime": ["thời_gian"],
@@ -49,16 +52,17 @@ dependency_relations = {
         ("dtime", "time")],
     "TO-TIME": [("atime", "time")],
     "PREP-TIME": [("arrive", "atime")],
-    "FROM-LOC": [("from", "city")],
-    "TO-LOC": [("arrive", "city")],
+    "FROM-LOC": [("from", "city"), ("from", "cityname")],
+    "TO-LOC": [("arrive", "city"), ("arrive", "cityname")],
     "CITY": [("city", "cityname")],
-    "BUS-NAME": [("busname", "bus")],
+    "BUS-NAME": [("bus", "busname")],
     "WH-BUS": [("bus", "wh")],
     "WH-RUN-TIME": [
         ("arrive", "runtime"),
         ("runtime", "wh")],
-    "WH-FROM-TIME": [("dtime", "wh")],
-    "WH-TO-TIME": [("atime", "wh")],
+    "WH-TIME": [("arrive", "whtime")],
+    # "WH-FROM-TIME": [("dtime", "wh"), ("arrive", "wh")],
+    # "WH-TO-TIME": [("atime", "wh")],
     "WH-CITY": [("city", "wh")],
 }
 
@@ -79,19 +83,19 @@ def preprocess(str):
 
 def main(question):
     print("Your question: " + question)
+
     # ================= Malt Parser - Dependencies =================
+    print("="*10, "Malt Parser - Dependencies", "="*10)
     question = preprocess(question)
     malt = MaltParser(question, my_lexicals, dependency_relations)
     malt.parse()
     malt_result = malt.get_malt()
-    print(malt_result)
+    print(malt_to_string(malt_result))
     write_malt_to_file(PATH_TO_OUTPUT_FILES["a"], malt_result)
 
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
     question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
-
-    question = "Xe bus nào đến thành phố Huế lúc 20:00HR ?"
 
     main(question)
