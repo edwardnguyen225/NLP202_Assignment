@@ -2,6 +2,9 @@ import re
 from pyvi import ViTokenizer
 
 
+ROOT = "<ROOT>"
+
+
 def handle_splitting_xebus(tokens):
     for i in range(len(tokens) - 2):
         if tokens[i] == "xe" and tokens[i+1] == "bus":
@@ -25,8 +28,15 @@ class MaltParser():
         self.malt = {}
 
     def parse(self):
+        buffer = self.tokens
+        stack = [ROOT]
+        malt = {}
+
         tokens_type = list(
-            map(lambda x: self.get_token_type(x), self.tokens))
+            map(lambda x: self.get_token_type(x), buffer))
+
+        print(buffer)
+        print(tokens_type)
 
     def get_malt(self):
         return self.malt
@@ -42,4 +52,6 @@ class MaltParser():
                 return token_type
         if re.search("\d{3,4}hr", word):
             return "time"
+        elif word == ROOT:
+            return ROOT
         return None
