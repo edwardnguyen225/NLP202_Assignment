@@ -28,7 +28,7 @@ my_lexicals = {
     "time": ["time"]
 }
 
-dependencies = {
+dependency_relations = {
     "bus": {},
     "city": {},
     "arrive": {},
@@ -61,7 +61,7 @@ def main(question):
     print("Your question: " + question)
     # ================= Malt Parser - Dependencies =================
     question = preprocess(question)
-    malt = malt_parser(question, my_lexicals, dependencies)
+    malt = malt_parser(question, my_lexicals, dependency_relations)
     print(malt)
 
 
