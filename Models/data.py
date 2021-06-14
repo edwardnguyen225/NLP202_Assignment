@@ -1,4 +1,5 @@
 from os.path import join
+from re import search
 
 ROOT = "<ROOT>"
 
@@ -62,3 +63,16 @@ dependency_relations = {
     # "WH-TO-TIME": [("atime", "wh")],
     "WH-CITY": [("city", "wh")],
 }
+
+
+def get_token_type(word):
+    for token_type in my_lexicals:
+        token_type_list = list(
+            map(lambda x: x.lower(), my_lexicals[token_type]))
+        if word.lower() in token_type_list:
+            return token_type
+    if search("\d{3,4}hr", word.lower()):
+        return "time"
+    elif word == ROOT:
+        return ROOT
+    return None

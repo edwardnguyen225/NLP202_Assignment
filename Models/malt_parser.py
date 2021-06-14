@@ -1,6 +1,6 @@
 import re
 from pyvi import ViTokenizer
-from Models.data import ROOT
+from Models.data import ROOT, get_token_type
 
 
 LEFTARC = "LEFT-ARC"
@@ -38,14 +38,14 @@ class MaltParser():
 
         count = 0
         # print(self.buffer)
-        tokens_type = list(map(lambda x: self.get_token_type(x), self.buffer))
+        tokens_type = list(map(lambda x: get_token_type(x), self.buffer))
         # print((tokens_type))
         # print(self.stack)
         while self.buffer:
             # print("\n=========" + str(count) + "========")
 
-            left_type = self.get_token_type(self.stack[-1])
-            right_type = self.get_token_type(self.buffer[0])
+            # left_type = get_token_type(self.stack[-1])
+            # right_type = get_token_type(self.buffer[0])
             (action, relation) = self.get_action_and_relation()
             if relation and (action != SHIFT or action != REDUCE):
                 self.malt.update(relation)
@@ -62,23 +62,24 @@ class MaltParser():
 
         return
 
+    def get_malt_txt(self):
+        result = ""
+        for relation in self.malt:
+            row = self.relation_to_string(relation)
+            row += f': {self.malt[relation]}\n'
+            result += row
+        return result
+
+    def relation_to_string(self, relation):
+        left, right = relation
+        str = f'({left}, {right})'
+        return str
+
     def get_malt(self):
         return self.malt
 
     def get_tokens(self):
         return self.tokens
-
-    def get_token_type(self, word):
-        for token_type in self.my_lexicals:
-            token_type_list = list(
-                map(lambda x: x.lower(), self.my_lexicals[token_type]))
-            if word.lower() in token_type_list:
-                return token_type
-        if re.search("\d{3,4}hr", word.lower()):
-            return "time"
-        elif word == ROOT:
-            return ROOT
-        return None
 
     def get_action_and_relation(self):
         exist_relation_stack_top2 = False
@@ -93,11 +94,11 @@ class MaltParser():
 
         # stack head
         left = self.stack[-1]
-        left_type = self.get_token_type(left)
+        left_type = get_token_type(left)
 
         # buffer first element
         right = self.buffer[0]
-        right_type = self.get_token_type(right)
+        right_type = get_token_type(right)
 
         relation_result = {}
 
