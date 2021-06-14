@@ -42,11 +42,11 @@ def main(question):
     relations = grammatical_relation.get_relations()
     relations_txt = grammatical_relation.get_relations_txt()
     print(relations_txt)
-    write_file(PATH_TO_OUTPUT_FILES["b"], relations_txt)
+    write_file(PATH_TO_OUTPUT_FILES["c"], relations_txt)
 
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
     question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
-
+    
     main(question)
