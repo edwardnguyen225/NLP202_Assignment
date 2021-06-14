@@ -32,11 +32,17 @@ def main(question):
     malt = MaltParser(question, my_lexicals, dependency_relations)
     malt.parse()
     malt_result = malt.get_malt()
-    print(malt_to_string(malt_result))
-    write_malt_to_file(PATH_TO_OUTPUT_FILES["a"], malt_result)
+    malt_txt = malt.get_malt_txt()
+    print(malt_txt)
+    write_file(PATH_TO_OUTPUT_FILES["a"], malt_txt)
 
     # ================= Grammatical Relation - Quan hệ văn phạm =================
     print("="*10, "Grammatical Relation - Quan hệ văn phạm", "="*10)
+    grammatical_relation = GrammaticalRelation(malt_result)
+    relations = grammatical_relation.get_relations()
+    relations_txt = grammatical_relation.get_relations_txt()
+    print(relations_txt)
+    write_file(PATH_TO_OUTPUT_FILES["b"], relations_txt)
 
 
 if __name__ == "__main__":
