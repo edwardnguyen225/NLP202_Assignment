@@ -25,7 +25,6 @@ def fix_time_mode(tokens):
             token = tokens_result[i]
             token = f'{token[0:2]}:{token[2:]}'
             tokens_result[i] = token
-    print(tokens_result)
     return tokens_result
 
 
@@ -49,26 +48,12 @@ class MaltParser():
         self.buffer = self.tokens
         self.malt = {}
 
-        count = 0
-        # print(self.buffer)
-        tokens_type = list(map(lambda x: get_token_type(x), self.buffer))
-        # print((tokens_type))
-        # print(self.stack)
         while self.buffer:
-            # print("\n=========" + str(count) + "========")
-
-            # left_type = get_token_type(self.stack[-1])
-            # right_type = get_token_type(self.buffer[0])
             (action, relation) = self.get_action_and_relation()
             if relation and (action != SHIFT or action != REDUCE):
                 self.malt.update(relation)
 
             self.execute_action(action)
-
-            # print(left_type, right_type, "=>", action, relation)
-            # print(self.buffer)
-            # print(self.stack)
-            count += 1
 
         del self.stack
         del self.buffer
