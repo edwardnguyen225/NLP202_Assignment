@@ -60,7 +60,7 @@ dependency_relations = {
     "CITY-NP": [("CITY", "CITY-NAME")],
     "BUS-NP": [("BUS", "BUS-CODE")],
     "WH-BUS": [("BUS", "WH")],
-    "WH-RUN-TIME": [
+    "WH-RUNTIME": [
         ("BUS-ARRIVE", "BUS-RUNTIME"),
         ("BUS-RUNTIME", "WH")],
     "WH-TIME": [("BUS-ARRIVE", "WH-TIME")],
@@ -69,6 +69,7 @@ dependency_relations = {
     "WH-CITY": [("CITY", "WH")],
 }
 
+WHS = ["WH-BUS", "WH-RUNTIME", "WH-TIME", "WH-CITY"]
 
 BUS_DATA = {}
 

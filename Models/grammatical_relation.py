@@ -1,5 +1,5 @@
 from copy import copy
-from Models.data import ROOT, get_token_type
+from Models.data import ROOT, WHS, get_token_type
 
 PRED = "PRED"
 
@@ -79,7 +79,7 @@ class GrammaticalRelation():
                 if relation_name == "PRED":
                     # relation = f'({var} PRED {child})'
                     relation = RelationPRED(var, child)
-                elif relation_name in ["WH-BUS", "WH-RUN-TIME", "WH-TIME", "WH-CITY"]:
+                elif relation_name in WHS:
                     var_parent = variables[node]
                     relation = RelationWH(var_parent, relation_name)
                 else:
