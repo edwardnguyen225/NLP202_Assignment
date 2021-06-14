@@ -1,8 +1,8 @@
 import re
 from pyvi import ViTokenizer
+from Models.data import ROOT
 
 
-ROOT = "<ROOT>"
 LEFTARC = "LEFT-ARC"
 RIGHTARC = "RIGHT-ARC"
 REDUCE = "REDUCE"
