@@ -1,7 +1,0 @@
-(s1 PRED đến)
-(s1 LSUBJ (BUS s2 Xe_bus))
-(s1 TO-LOC (CITY s3 thành_phố))
-(s1 PREP-TIME (BUS-ATIME s4 lúc))
-(s2 WH-BUS)
-(s3 CITY-NP (CITY-NAME s6 Hồ_Chí_Minh))
-(s4 TO-TIME (TIME-MODE s7 20:30HR))
