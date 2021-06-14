@@ -2,6 +2,6 @@
 (đến, Xe_bus): LSUBJ
 (<ROOT>, đến): PRED
 (đến, thành_phố): TO-LOC
-(thành_phố, Hồ_Chí_Minh): CITY-NP
+(thành_phố, Huế): CITY-NP
 (đến, lúc): PREP-TIME
-(lúc, 20:30HR): TO-TIME
+(lúc, 20:00HR): TO-TIME
