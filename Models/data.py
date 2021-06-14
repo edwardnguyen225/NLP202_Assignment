@@ -1,6 +1,7 @@
 from copy import copy
 from os.path import join
 from re import search
+from Models.bus import Bus
 
 ROOT = "<ROOT>"
 TIME_MODE = "TIME-MODE"
@@ -15,6 +16,9 @@ DEFAULT_QUESTIONS = [
 ]
 
 REDUNDANT_TOKENS = [".", ",", "?", ":"]
+
+PATH_TO_INPUT = join(".", "Input")
+PATH_TO_DATA_FILE = join(PATH_TO_INPUT, "database.txt")
 
 PATH_TO_OUTPUT = join(".", "Output")
 PATH_TO_OUTPUT_FILES = {
@@ -66,7 +70,7 @@ dependency_relations = {
 }
 
 
-# BUS_DATA = load_bus_data()
+BUS_DATA = {}
 
 
 def get_token_type(word):
@@ -84,6 +88,93 @@ def get_token_type(word):
     return None
 
 
+def remove_brackets_and_spaces(str):
+    result = " ".join(str.split())
+    result = result.replace("(", "")
+    result = result.replace(")", "")
+    return result
+
+
+def row_to_list(row):
+    lst = row.split(")")
+    lst.remove("\n")
+    lst = list(map(remove_brackets_and_spaces, lst))
+    return lst
+
+
 def load_bus_data():
-    data = {}
-    return data
+    txt = ""
+    with open(PATH_TO_DATA_FILE, "r") as f:
+        txt = f.readlines()
+
+    raw_data = []
+    for row in txt:
+        raw_data.extend(row_to_list(row))
+
+    for data in raw_data:
+        process_data(data)
+
+
+def process_data(data):
+    vals = data.split(" ")
+    if vals[0].upper() == "BUS":
+        set_bus(vals[1])
+    elif vals[0].upper() == "ATIME":
+        set_arrival(vals[1:])
+    elif vals[0].upper() == "DTIME":
+        set_departure(vals[1:])
+    elif vals[0].upper() == "RUN-TIME":
+        set_runtime(vals[1:])
+
+
+def set_bus(bus_code):
+    if bus_code in BUS_DATA:
+        return
+    new_bus = Bus(bus_code)
+    BUS_DATA[bus_code] = new_bus
+
+
+def set_arrival(lst):
+    bus_code, dest, atime = lst
+    if bus_code not in BUS_DATA:
+        raise Exception("Unknown bus code: %s" % bus_code)
+
+    bus = BUS_DATA[bus_code]
+    bus.set_dest(dest)
+    bus.set_atime(atime)
+
+
+def set_departure(lst):
+    bus_code, src, dtime = lst
+    if bus_code not in BUS_DATA:
+        raise Exception("Unknown bus code: %s" % bus_code)
+
+    bus = BUS_DATA[bus_code]
+    bus.set_src(src)
+    bus.set_dtime(dtime)
+
+
+def set_runtime(lst):
+    if lst[-1].upper() == "HR":
+        lst[-2] += lst[-1]
+        lst.pop(-1)
+
+    bus_code, src, dest, runtime = lst
+    if bus_code not in BUS_DATA:
+        raise Exception("Unknown bus code: %s" % bus_code)
+
+    bus = BUS_DATA[bus_code]
+    if bus.get_src() != src:
+        raise Exception(f'Invalid bus {bus_code} source: {src}')
+    elif bus.get_dest() != dest:
+        raise Exception(f'Invalid bus {bus_code} destination: {dest}')
+
+    bus.set_runtime(runtime)
+
+
+def print_buses():
+    for bus in BUS_DATA:
+        print(BUS_DATA[bus])
+
+
+load_bus_data()
