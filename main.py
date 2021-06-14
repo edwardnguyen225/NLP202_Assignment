@@ -84,14 +84,17 @@ def preprocess(str):
 def main(question):
     print("Your question: " + question)
 
-    # ================= Malt Parser - Dependencies =================
-    print("="*10, "Malt Parser - Dependencies", "="*10)
+    # ================= Malt Parser - Phân tích cú pháp phụ thuộc =================
+    print("="*10, "Malt Parser - Phân tích cú pháp phụ thuộc", "="*10)
     question = preprocess(question)
     malt = MaltParser(question, my_lexicals, dependency_relations)
     malt.parse()
     malt_result = malt.get_malt()
     print(malt_to_string(malt_result))
     write_malt_to_file(PATH_TO_OUTPUT_FILES["a"], malt_result)
+
+    # ================= Grammatical Relation - Quan hệ văn phạm =================
+    print("="*10, "Grammatical Relation - Quan hệ văn phạm", "="*10)
 
 
 if __name__ == "__main__":
