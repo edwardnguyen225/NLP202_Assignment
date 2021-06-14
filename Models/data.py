@@ -1,8 +1,9 @@
+from copy import copy
 from os.path import join
 from re import search
 
 ROOT = "<ROOT>"
-
+TIME_MODE = "TIME-MODE"
 
 DEFAULT_QUESTIONS = [
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?",
@@ -26,43 +27,46 @@ PATH_TO_OUTPUT_FILES = {
 }
 
 my_lexicals = {
-    "bus": ["bus", "buýt", "xe_bus", "xe_buýt", "xe"],
-    "city": ["thành_phố", "tỉnh"],
-    "arrive": ["đến", "tới"],
-    "from": ["từ"],
-    "wh": ["nào"],
-    "whtime": ["lúc_nào"],
-    "atime": ["lúc", "vào_lúc"],
-    "dtime": ["lúc", "từ_lúc"],
-    "runtime": ["thời_gian"],
-    "busname": ["B1", "B2", "B3", "B4", "B5", "B6"],
-    "cityname": ["hue", "hcm", "hn", "danang", "hồ_chí_minh", "hà_nội", "huế", "đà_nẵng"],
-    "time": ["time"]
+    "BUS": ["bus", "buýt", "xe_bus", "xe_buýt", "xe"],
+    "CITY": ["thành_phố", "tỉnh"],
+    "BUS-ARRIVE": ["đến", "tới"],
+    "BUS-SRC": ["từ"],
+    "WH": ["nào"],
+    "WH-TIME": ["lúc_nào"],
+    "BUS-ATIME": ["lúc", "vào_lúc"],
+    "BUS-DTIME": ["lúc", "từ_lúc"],
+    "BUS-RUNTIME": ["thời_gian"],
+    "BUS-CODE": ["B1", "B2", "B3", "B4", "B5", "B6"],
+    "CITY-NAME": ["hue", "hcm", "hn", "danang", "hồ_chí_minh", "hà_nội", "huế", "đà_nẵng"],
+    TIME_MODE: [TIME_MODE]
 }
 
 # dependency from left --> right
 dependency_relations = {
-    "PRED": [("<ROOT>", "arrive")],
-    "LSUBJ": [("arrive", "bus")],
-    "PREP": [("arrive", "from")],
+    "PRED": [("<ROOT>", "BUS-ARRIVE")],
+    "LSUBJ": [("BUS-ARRIVE", "BUS")],
+    "PREP": [("BUS-ARRIVE", "BUS-SRC")],
     "FROM-TIME": [
-        ("from", "time"),
-        ("dtime", "time")],
-    "TO-TIME": [("atime", "time")],
-    "PREP-TIME": [("arrive", "atime")],
-    "FROM-LOC": [("from", "city"), ("from", "cityname")],
-    "TO-LOC": [("arrive", "city"), ("arrive", "cityname")],
-    "CITY": [("city", "cityname")],
-    "BUS-NAME": [("bus", "busname")],
-    "WH-BUS": [("bus", "wh")],
+        ("BUS-SRC", TIME_MODE),
+        ("BUS-DTIME", TIME_MODE)],
+    "TO-TIME": [("BUS-ATIME", TIME_MODE)],
+    "PREP-TIME": [("BUS-ARRIVE", "BUS-ATIME")],
+    "FROM-LOC": [("BUS-SRC", "CITY"), ("BUS-SRC", "CITY-NAME")],
+    "TO-LOC": [("BUS-ARRIVE", "CITY"), ("BUS-ARRIVE", "CITY-NAME")],
+    "CITY-NP": [("CITY", "CITY-NAME")],
+    "BUS-NP": [("BUS", "BUS-CODE")],
+    "WH-BUS": [("BUS", "WH")],
     "WH-RUN-TIME": [
-        ("arrive", "runtime"),
-        ("runtime", "wh")],
-    "WH-TIME": [("arrive", "whtime")],
-    # "WH-FROM-TIME": [("dtime", "wh"), ("arrive", "wh")],
-    # "WH-TO-TIME": [("atime", "wh")],
-    "WH-CITY": [("city", "wh")],
+        ("BUS-ARRIVE", "BUS-RUNTIME"),
+        ("BUS-RUNTIME", "WH")],
+    "WH-TIME": [("BUS-ARRIVE", "WH-TIME")],
+    # "WH-FROM-TIME": [("BUS-DTIME", "WH"), ("BUS-ARRIVE", "WH")],
+    # "WH-TO-TIME": [("BUS-ATIME", "WH")],
+    "WH-CITY": [("CITY", "WH")],
 }
+
+
+# BUS_DATA = load_bus_data()
 
 
 def get_token_type(word):
@@ -71,8 +75,15 @@ def get_token_type(word):
             map(lambda x: x.lower(), my_lexicals[token_type]))
         if word.lower() in token_type_list:
             return token_type
-    if search("\d{3,4}hr", word.lower()):
-        return "time"
+    time = copy(word)
+    time = time.replace(":", "").lower()
+    if search("\d{3,4}hr", time):
+        return TIME_MODE
     elif word == ROOT:
         return ROOT
     return None
+
+
+def load_bus_data():
+    data = {}
+    return data

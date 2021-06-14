@@ -1,6 +1,6 @@
-import re
+from copy import copy
 from pyvi import ViTokenizer
-from Models.data import ROOT, get_token_type
+from Models.data import ROOT, TIME_MODE, get_token_type
 
 
 LEFTARC = "LEFT-ARC"
@@ -10,16 +10,29 @@ SHIFT = "SHIFT"
 
 
 def handle_splitting_xebus(tokens):
-    for i in range(len(tokens) - 2):
-        if tokens[i].lower() == "xe" and tokens[i+1] == "bus":
-            tokens[i] += "_bus"
-            tokens.pop(i+1)
-    return tokens
+    tokens_result = copy(tokens)
+    for i in range(len(tokens_result) - 2):
+        if tokens_result[i].lower() == "xe" and tokens_result[i+1] == "bus":
+            tokens_result[i] += "_bus"
+            tokens_result.pop(i+1)
+    return tokens_result
+
+
+def fix_time_mode(tokens):
+    tokens_result = copy(tokens)
+    for i in range(len(tokens_result)):
+        if get_token_type(tokens_result[i]) == TIME_MODE:
+            token = tokens_result[i]
+            token = f'{token[0:2]}:{token[2:]}'
+            tokens_result[i] = token
+    print(tokens_result)
+    return tokens_result
 
 
 def tokenize(str):
     tokens = ViTokenizer.tokenize(str).split()
     tokens = handle_splitting_xebus(tokens)
+    tokens = fix_time_mode(tokens)
     return tokens
 
 
