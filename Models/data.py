@@ -7,7 +7,7 @@ ROOT = "<ROOT>"
 TIME_MODE = "TIME-MODE"
 
 DEFAULT_QUESTIONS = [
-    "Xe bus nào từ thành phố Hồ Chí Minh lúc 10:00HR đến thành phố Huế lúc 19:00HR ?",
+    "Xe bus nào từ Hồ Chí Minh lúc 10:00HR đến thành phố Huế lúc 19:00HR ?",
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?",
     "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?",
     "Xe bus nào đến thành phố Hồ Chí Minh ?",
@@ -52,7 +52,7 @@ dependency_relations = {
     "PREP": [("BUS-ARRIVE", "FROM")],
     "AT-TIME": [("FROM", TIME_MODE), ("POINT-TIME", TIME_MODE)],
     "FROM-TIME": [("FROM", "POINT-TIME")],
-    "PREP-TIME": [("BUS-ARRIVE", "POINT-TIME")],
+    "TO-TIME": [("BUS-ARRIVE", "POINT-TIME")],
     "FROM-LOC": [("FROM", "CITY"), ("FROM", "CITY-NAME")],
     "TO-LOC": [("BUS-ARRIVE", "CITY"), ("BUS-ARRIVE", "CITY-NAME")],
     "CITY-NP": [("CITY", "CITY-NAME")],
