@@ -1,0 +1,1 @@
+WH-BUS(đến s1 [AGENT s1 (BUS b1 Xe_bus)][FROM-LOC s1 (CITY-NAME c1 Hồ_Chí_Minh)][FROM-TIME s1 (TIME-MODE t1 10:00HR)][TO-LOC s1 (CITY s2 thành_phố)][TO-TIME s1 (TIME-MODE t2 19:00HR)][CITY-NP s2 (CITY-NAME c2 Huế)])
