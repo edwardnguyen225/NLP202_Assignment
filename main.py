@@ -10,6 +10,10 @@ from Models.logical_parser import LogicalParser
 from Models.file_manipulator import *
 
 
+HEADER_LENGTH = 69
+HORIZONTAL_BAR = "-" * HEADER_LENGTH
+
+
 def remove_redundant(str):
     result = copy(str)
     for token in REDUNDANT_TOKENS:
@@ -25,11 +29,16 @@ def preprocess(str):
 
 
 def print_header(header):
-    print("="*10, header, "="*10)
+    space_num = round((HEADER_LENGTH - len(header)) / 2) - 1
+    spaces = " " * space_num
+    header = f'|{spaces}{header}{spaces}|'
+    print(HORIZONTAL_BAR)
+    print(header)
+    print(HORIZONTAL_BAR)
 
 
 def main(question):
-    print("\nYour question: " + question)
+    print("Your question: " + question + "\n")
 
     # ================= A - Malt Parser - Phân tích cú pháp phụ thuộc =================
     print_header("A - Malt Parser - Phân tích cú pháp phụ thuộc")
@@ -51,7 +60,6 @@ def main(question):
     relations_txt = grammatical_relation.get_relations_txt()
     print(relations_txt)
     write_file(PATH_TO_OUTPUT_FILES["c"], relations_txt)
-    # return
 
     # ================= D - Logical Form - Dạng luận lý =================
     print_header("D - Logical Form - Dạng luận lý")
@@ -74,5 +82,5 @@ if __name__ == "__main__":
     # for ques in DEFAULT_QUESTIONS:
     #     main(ques)
 
-    print("\n"+"="*69)
+    print("\n" + HORIZONTAL_BAR)
     print("PROGRAM RUN SUCCESSFULLY WITHOUT ANY BUG 🍻")
