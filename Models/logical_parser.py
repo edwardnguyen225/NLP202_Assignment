@@ -1,3 +1,5 @@
+from copy import copy
+import re
 from Models.data import WHS
 import Models.grammatical_relation_parser as grammatical_relation_parser
 
@@ -45,12 +47,37 @@ class RelationParentChild(grammatical_relation_parser.RelationParentChild):
 
 
 class LogicalParser():
-    def __init__(self, grammatical_relations):
+    def __init__(self, grammatical_relations, variables):
+        self.variables = variables
         self.logical_relations = LogicalParser.gramma_to_logical_relations(
             grammatical_relations)
+        self.logical_form = self.set_logical_form()
 
     def get_relations(self):
         return self.logical_relations
+
+    def set_logical_form(self):
+        relations = copy(self.get_relations())
+        pred_relation = relations.pop(0)
+        logical_form = f'{pred_relation.predicate} {pred_relation.var} '
+        while relations:
+            relation = relations.pop(0)
+            if relation.relation_name in WHS:
+                wh_query = relation.relation_name
+                continue
+            relation_str = str(relation)
+            length = len(relation_str)
+            relation_str = "[" + relation_str[1:length - 1] + "]"
+            logical_form += relation_str
+
+        logical_form = f'({logical_form})'
+        if wh_query:
+            logical_form = wh_query + logical_form
+
+        return logical_form
+
+    def get_logical_form(self):
+        return self.logical_form
 
     @staticmethod
     def gramma_to_logical_relations(grammatical_relations):
@@ -73,8 +100,6 @@ class LogicalParser():
                 gramma_relation.var, gramma_relation.predicate)
         elif isinstance(gramma_relation, grammatical_relation_parser.RelationParentChild):
             relation_name = gramma_relation.relation_name
-            if relation_name == "PREP" or relation_name == "TO-TIME":
-                return None
             relation = RelationParentChild(
                 relation_name, gramma_relation.var, gramma_relation.child)
         elif isinstance(gramma_relation, grammatical_relation_parser.RelationWH):
