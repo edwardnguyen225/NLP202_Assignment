@@ -121,12 +121,17 @@ class GrammaticalRelationParser():
         malt_tree_out.update(malt_tree_in)
         return malt_tree_out
 
-    @staticmethod
     def malt_to_grammatical_relation(malt):
         malt_tree = GrammaticalRelationParser.process_malt_tree(malt)
 
         relations_output = []
-        variables = {}
+        variables = {
+            "BUS": {"prefix": "b"},
+            "BUS-CODE": {"prefix": "bn"},
+            "CITY-NAME": {"prefix": "c"},
+            "TIME-MODE": {"prefix": "t"},
+            "OTHER": {"prefix": "s"}
+        }
         queue = [ROOT]
         while queue:
             """
@@ -140,18 +145,28 @@ class GrammaticalRelationParser():
                     continue
                 child = relation_tup[1]
                 queue.append(child)
-                variables[child] = f's{len(variables) + 1}'
-
-                var = variables[child]
+                child_type = get_token_type(child)
+                if child_type not in variables:
+                    child_type = "OTHER"
+                sub_variables = variables[child_type]
+                prefix = sub_variables["prefix"]
+                variables[child_type][child] = f'{prefix}{len(variables[child_type])}'
+                var = sub_variables[child]
                 relation = None
                 if relation_name == "PRED":
                     # relation = f'({var} PRED {child})'
                     relation = RelationPRED(var, child)
                 elif relation_name in WHS:
-                    var_parent = variables[node]
+                    parent_type = get_token_type(node)
+                    if parent_type not in variables:
+                        parent_type = "OTHER"
+                    var_parent = variables[parent_type][node]
                     relation = RelationWH(relation_name, var_parent)
                 else:
-                    var_parent = variables[node]
+                    parent_type = get_token_type(node)
+                    if parent_type not in variables:
+                        parent_type = "OTHER"
+                    var_parent = variables[parent_type][node]
                     relation = RelationParentChild(
                         relation_name, var_parent, var, child)
 
