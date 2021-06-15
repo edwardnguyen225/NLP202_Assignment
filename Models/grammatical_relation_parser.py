@@ -38,7 +38,7 @@ class Relation():
         return str
 
 
-class GrammaticalRelation():
+class GrammaticalRelationParser():
     def __init__(self, malt):
         self.grammatical_relation = self.malt_to_grammatical_relation(malt)
         pass
