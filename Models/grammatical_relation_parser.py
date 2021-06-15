@@ -28,25 +28,24 @@ class RelationPRED(RelationBase):
 
 
 class RelationWH(RelationBase):
-    def __init__(self, var, relation_name):
+    def __init__(self, relation_name, var):
         super().__init__(relation_name)
         self.var = var
 
     def __str__(self):
-        str = f'({self.var} {self.relation_name})'
-        return str
+        return f'({self.var} {self.relation_name})'
 
 
 class RelationParentChild(RelationBase):
     def __init__(self, relation_name, var, child_var, child_word):
         super().__init__(relation_name)
-        self.var_parent = var
+        self.var = var
         child_type = get_token_type(child_word)
         self.child = RelationBase(
             child_type, var=child_var, word=child_word)
 
     def __str__(self):
-        str = f'({self.var_parent} {self.relation_name} {self.child})'
+        str = f'({self.var} {self.relation_name} {self.child})'
         return str
 
 
@@ -93,7 +92,7 @@ class GrammaticalRelationParser():
                     relation = RelationPRED(var, child)
                 elif relation_name in WHS:
                     var_parent = variables[node]
-                    relation = RelationWH(var_parent, relation_name)
+                    relation = RelationWH( relation_name, var_parent)
                 else:
                     var_parent = variables[node]
                     relation = RelationParentChild(
