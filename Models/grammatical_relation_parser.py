@@ -4,9 +4,17 @@ from Models.data import ROOT, WHS, get_token_type
 PRED = "PRED"
 
 
-class RelationPRED():
+class RelationBase():
+    def __init__(self, relation_name):
+        self.relation_name = relation_name
+
+    def __str__(self):
+        return f'({self.relation_name})'
+
+
+class RelationPRED(RelationBase):
     def __init__(self, var, predicate):
-        self.relation_name = PRED
+        super().__init__(PRED)
         self.var = var
         self.predicate = predicate
 
@@ -15,9 +23,9 @@ class RelationPRED():
         return str
 
 
-class RelationWH():
+class RelationWH(RelationBase):
     def __init__(self, var, relation_name):
-        self.relation_name = relation_name
+        super().__init__(relation_name)
         self.var = var
 
     def __str__(self):
@@ -25,10 +33,10 @@ class RelationWH():
         return str
 
 
-class Relation():
+class RelationParentChild(RelationBase):
     def __init__(self, var_parent, relation_name, var_child, child):
+        super().__init__(relation_name)
         self.var_parent = var_parent
-        self.relation_name = relation_name
         self.var_child = var_child
         self.child = child
         self.child_type = get_token_type(child)
@@ -84,7 +92,7 @@ class GrammaticalRelationParser():
                     relation = RelationWH(var_parent, relation_name)
                 else:
                     var_parent = variables[node]
-                    relation = Relation(
+                    relation = RelationParentChild(
                         var_parent, relation_name, var, child)
                 relations_output.append(relation)
         return relations_output
