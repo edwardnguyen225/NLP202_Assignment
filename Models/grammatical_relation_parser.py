@@ -1,3 +1,4 @@
+from Models.malt_parser import MaltParser
 from copy import copy
 from Models.data import ROOT, WHS, get_token_type
 
@@ -51,7 +52,8 @@ class RelationParentChild(RelationBase):
 
 class GrammaticalRelationParser():
     def __init__(self, malt):
-        self.grammatical_relation = self.malt_to_grammatical_relation(malt)
+        self.grammatical_relation = GrammaticalRelationParser.malt_to_grammatical_relation(
+            malt)
         pass
 
     def get_relations(self):
@@ -65,8 +67,46 @@ class GrammaticalRelationParser():
         return result
 
     @staticmethod
+    def process_malt_tree(malt):
+        malt_tree_out = {}
+        predicate = MaltParser.get_main_verb(malt)
+
+        # Replace child in FROM-LOC, TO-LOC, and FROM-TIME, TO-TIME
+        relations = list(malt.keys())
+        while relations:
+            relation_tup = relations.pop(0)
+            relation_name = malt[relation_tup]
+            if relation_name == "PREP":
+                continue
+
+            if relation_name in ["FROM-LOC", "TO-LOC"]:
+                next_relation_tup = relations[0]
+                next_relation_name = malt[next_relation_tup]
+                if next_relation_name in ["CITY-NP"]:
+                    relation_tup = (predicate, next_relation_tup[1])
+                    relations.pop(0)
+                else:
+                    relation_tup = (predicate, relation_tup[1])
+            elif relation_name in ["FROM-TIME", "TO-TIME"]:
+                next_relation_tup = relations[0]
+                next_relation_name = malt[next_relation_tup]
+                if next_relation_name in ["AT-TIME"]:
+                    relation_tup = (predicate, next_relation_tup[1])
+                    relations.pop(0)
+            malt_tree_out[relation_tup] = relation_name
+
+        # Sorting malt_tree_out
+
+        return malt_tree_out
+
+    @staticmethod
     def malt_to_grammatical_relation(malt):
-        malt_tree = copy(malt)
+        malt_tree = GrammaticalRelationParser.process_malt_tree(malt)
+        print("PROCESSING MALT TREE")
+        for child in malt_tree:
+            print(child, malt_tree[child])
+        print("END PROCESSING\n")
+
         relations_output = []
         variables = {}
         queue = [ROOT]
@@ -77,25 +117,26 @@ class GrammaticalRelationParser():
                 and their relation, then remove it from malt_tree to make it easier to traverse latter
             """
             node = queue.pop(0)
-            for relation_tup in malt_tree:
+            for relation_tup, relation_name in malt_tree.items():
                 if node != relation_tup[0]:
                     continue
-
                 child = relation_tup[1]
                 queue.append(child)
                 variables[child] = f's{len(variables) + 1}'
 
                 var = variables[child]
-                relation_name = malt_tree[relation_tup]
+                relation = None
                 if relation_name == "PRED":
                     # relation = f'({var} PRED {child})'
                     relation = RelationPRED(var, child)
                 elif relation_name in WHS:
                     var_parent = variables[node]
-                    relation = RelationWH( relation_name, var_parent)
+                    relation = RelationWH(relation_name, var_parent)
                 else:
                     var_parent = variables[node]
                     relation = RelationParentChild(
                         relation_name, var_parent, var, child)
-                relations_output.append(relation)
+
+                if relation:
+                    relations_output.append(relation)
         return relations_output
