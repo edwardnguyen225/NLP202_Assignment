@@ -52,9 +52,10 @@ class RelationParentChild(RelationBase):
 
 class GrammaticalRelationParser():
     def __init__(self, malt):
-        self.grammatical_relation = GrammaticalRelationParser.malt_to_grammatical_relation(
+        self.processed_malt_tree = GrammaticalRelationParser.process_malt_tree(
             malt)
-        pass
+        self.variables = self.set_variables()
+        self.grammatical_relation = self.set_grammatical_relation_from_malt()
 
     def get_relations(self):
         return self.grammatical_relation
@@ -66,6 +67,47 @@ class GrammaticalRelationParser():
             result += row
         return result
 
+    def set_variables(self):
+        malt_tree = self.processed_malt_tree
+
+        variables = {
+            "BUS": {"prefix": "b"},
+            "BUS-CODE": {"prefix": "bn"},
+            "CITY-NAME": {"prefix": "c"},
+            "TIME-MODE": {"prefix": "t"},
+            "OTHER": {"prefix": "s"}
+        }
+        queue = [ROOT]
+        while queue:
+            """
+            Pop the head of the queue
+            Add all of its children to the queue
+                and their relation, then remove it from malt_tree to make it easier to traverse latter
+            """
+            node = queue.pop(0)
+            for relation_tup in malt_tree.keys():
+                if node != relation_tup[0]:
+                    continue
+                child = relation_tup[1]
+                queue.append(child)
+                child_type = get_token_type(child)
+                if child_type not in variables:
+                    child_type = "OTHER"
+                sub_variables = variables[child_type]
+                prefix = sub_variables["prefix"]
+                variables[child_type][child] = f'{prefix}{len(variables[child_type])}'
+
+        variables_output = {}
+        for group in variables.values():
+            for word, var in group.items():
+                if word == "prefix":
+                    continue
+                variables_output[word] = var
+        return variables_output
+
+    def get_variables(self):
+        return self.variables
+
     @staticmethod
     def process_malt_tree(malt):
         malt_tree_out = {}
@@ -73,13 +115,14 @@ class GrammaticalRelationParser():
 
         # Replace child in FROM-LOC, TO-LOC, and FROM-TIME, TO-TIME
         relations = list(malt.keys())
+        count = 0
         while relations:
             relation_tup = relations.pop(0)
             relation_name = malt[relation_tup]
             if relation_name == "PREP":
                 continue
 
-            if relation_name in ["FROM-LOC", "TO-LOC"]:
+            if relation_name in ["FROM-LOC", "TO-LOC"] and relation_tup[0] != predicate:
                 next_relation_tup = relations[0]
                 next_relation_name = malt[next_relation_tup]
                 if next_relation_name in ["CITY-NP"]:
@@ -121,17 +164,11 @@ class GrammaticalRelationParser():
         malt_tree_out.update(malt_tree_in)
         return malt_tree_out
 
-    def malt_to_grammatical_relation(malt):
-        malt_tree = GrammaticalRelationParser.process_malt_tree(malt)
+    def set_grammatical_relation_from_malt(self):
+        malt_tree = self.processed_malt_tree
 
         relations_output = []
-        variables = {
-            "BUS": {"prefix": "b"},
-            "BUS-CODE": {"prefix": "bn"},
-            "CITY-NAME": {"prefix": "c"},
-            "TIME-MODE": {"prefix": "t"},
-            "OTHER": {"prefix": "s"}
-        }
+        variables = self.variables
         queue = [ROOT]
         while queue:
             """
@@ -145,28 +182,16 @@ class GrammaticalRelationParser():
                     continue
                 child = relation_tup[1]
                 queue.append(child)
-                child_type = get_token_type(child)
-                if child_type not in variables:
-                    child_type = "OTHER"
-                sub_variables = variables[child_type]
-                prefix = sub_variables["prefix"]
-                variables[child_type][child] = f'{prefix}{len(variables[child_type])}'
-                var = sub_variables[child]
+                var = variables[child]
                 relation = None
                 if relation_name == "PRED":
                     # relation = f'({var} PRED {child})'
                     relation = RelationPRED(var, child)
                 elif relation_name in WHS:
-                    parent_type = get_token_type(node)
-                    if parent_type not in variables:
-                        parent_type = "OTHER"
-                    var_parent = variables[parent_type][node]
+                    var_parent = variables[node]
                     relation = RelationWH(relation_name, var_parent)
                 else:
-                    parent_type = get_token_type(node)
-                    if parent_type not in variables:
-                        parent_type = "OTHER"
-                    var_parent = variables[parent_type][node]
+                    var_parent = variables[node]
                     relation = RelationParentChild(
                         relation_name, var_parent, var, child)
 
