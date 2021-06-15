@@ -95,17 +95,35 @@ class GrammaticalRelationParser():
                     relations.pop(0)
             malt_tree_out[relation_tup] = relation_name
 
-        # Sorting malt_tree_out
+        # Bring PRED and BUS to the top
+        malt_tree_in = copy(malt_tree_out)
+        malt_tree_out = {}
+        moved_pred = False
+        for relation in malt_tree_in:
+            if malt_tree_in[relation] == PRED:
+                pred_relation = relation
+                malt_tree_out[relation] = malt_tree_in[relation]
+                moved_pred = True
+                break
+        if moved_pred:
+            del malt_tree_in[pred_relation]
 
+        moved_lsubj = False
+        for relation in malt_tree_in:
+            if malt_tree_in[relation] == "LSUBJ":
+                lsubj_relation = relation
+                malt_tree_out[relation] = malt_tree_in[relation]
+                moved_lsubj = True
+                break
+        if moved_lsubj:
+            del malt_tree_in[lsubj_relation]
+
+        malt_tree_out.update(malt_tree_in)
         return malt_tree_out
 
     @staticmethod
     def malt_to_grammatical_relation(malt):
         malt_tree = GrammaticalRelationParser.process_malt_tree(malt)
-        print("PROCESSING MALT TREE")
-        for child in malt_tree:
-            print(child, malt_tree[child])
-        print("END PROCESSING\n")
 
         relations_output = []
         variables = {}
