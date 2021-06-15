@@ -29,7 +29,7 @@ def print_header(header):
 
 
 def main(question):
-    print("Your question: " + question)
+    print("\nYour question: " + question)
 
     # ================= A - Malt Parser - Phân tích cú pháp phụ thuộc =================
     print_header("A - Malt Parser - Phân tích cú pháp phụ thuộc")
@@ -48,7 +48,6 @@ def main(question):
     # ================= C - Grammatical Relation - Quan hệ văn phạm =================
     print_header("C - Grammatical Relation - Quan hệ văn phạm")
     grammatical_relation = GrammaticalRelationParser(malt_result)
-    gramma_relations = grammatical_relation.get_relations()
     relations_txt = grammatical_relation.get_relations_txt()
     print(relations_txt)
     write_file(PATH_TO_OUTPUT_FILES["c"], relations_txt)
@@ -56,16 +55,24 @@ def main(question):
 
     # ================= D - Logical Form - Dạng luận lý =================
     print_header("D - Logical Form - Dạng luận lý")
-    logical_parser = LogicalParser(gramma_relations)
-    print("\nPLUS ULTRAAAAAAAAAAAAAAAA")
-
-    logical_relations = logical_parser.get_relations()
-    for i in range(0, len(logical_relations)):
-        print(i, logical_relations[i])
+    gramma_relations = grammatical_relation.get_relations()
+    variables = grammatical_relation.get_variables()
+    logical_parser = LogicalParser(gramma_relations, variables)
+    logical_form = logical_parser.get_logical_form()
+    print(logical_form)
+    write_file(PATH_TO_OUTPUT_FILES["d"], logical_form)
 
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
     question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
-    question = DEFAULT_QUESTIONS[0]
     main(question)
+
+    # question = DEFAULT_QUESTIONS[0]
+    # main(question)
+
+    # for ques in DEFAULT_QUESTIONS:
+    #     main(ques)
+
+    print("\n"+"="*69)
+    print("PROGRAM RUN SUCCESSFULLY WITHOUT ANY BUG 🍻")
