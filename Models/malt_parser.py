@@ -79,6 +79,12 @@ class MaltParser():
     def get_tokens(self):
         return self.tokens
 
+    @staticmethod
+    def get_main_verb(malt):
+        for relation, relation_name in malt.items():
+            if relation_name == "PRED":
+                return relation[1]
+
     def get_action_and_relation(self):
         exist_relation_stack_top2 = False
         relations = self.malt.keys()
