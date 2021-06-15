@@ -72,10 +72,11 @@ class LogicalParser():
             relation = RelationPRED(
                 gramma_relation.var, gramma_relation.predicate)
         elif isinstance(gramma_relation, grammatical_relation_parser.RelationParentChild):
-            if gramma_relation.relation_name == "PREP":
-                pass
+            relation_name = gramma_relation.relation_name
+            if relation_name == "PREP" or relation_name == "TO-TIME":
+                return None
             relation = RelationParentChild(
-                gramma_relation.relation_name, gramma_relation.var, gramma_relation.child)
+                relation_name, gramma_relation.var, gramma_relation.child)
         elif isinstance(gramma_relation, grammatical_relation_parser.RelationWH):
             relation = RelationWH(
                 gramma_relation.relation_name, gramma_relation.var)
