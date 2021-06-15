@@ -5,10 +5,14 @@ PRED = "PRED"
 
 
 class RelationBase():
-    def __init__(self, relation_name):
+    def __init__(self, relation_name, var=None, word=None):
         self.relation_name = relation_name
+        self.var = var
+        self.word = word
 
     def __str__(self):
+        if self.var and self.word:
+            return f'({self.relation_name} {self.var} {self.word})'
         return f'({self.relation_name})'
 
 
@@ -34,15 +38,15 @@ class RelationWH(RelationBase):
 
 
 class RelationParentChild(RelationBase):
-    def __init__(self, var_parent, relation_name, var_child, child):
+    def __init__(self, relation_name, var, child_var, child_word):
         super().__init__(relation_name)
-        self.var_parent = var_parent
-        self.var_child = var_child
-        self.child = child
-        self.child_type = get_token_type(child)
+        self.var_parent = var
+        child_type = get_token_type(child_word)
+        self.child = RelationBase(
+            child_type, var=child_var, word=child_word)
 
     def __str__(self):
-        str = f'({self.var_parent} {self.relation_name} ({self.child_type} {self.var_child} {self.child}))'
+        str = f'({self.var_parent} {self.relation_name} {self.child})'
         return str
 
 
@@ -93,6 +97,6 @@ class GrammaticalRelationParser():
                 else:
                     var_parent = variables[node]
                     relation = RelationParentChild(
-                        var_parent, relation_name, var, child)
+                        relation_name, var_parent, var, child)
                 relations_output.append(relation)
         return relations_output
