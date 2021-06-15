@@ -4,8 +4,8 @@ import random
 
 from copy import copy
 from Models.data import *
-from Models.malt_parser import *
-from Models.grammatical_relation import *
+from Models.malt_parser import MaltParser
+from Models.grammatical_relation_parser import GrammaticalRelationParser
 from Models.file_manipulator import *
 
 
@@ -38,7 +38,7 @@ def main(question):
 
     # ================= Grammatical Relation - Quan hệ văn phạm =================
     print("="*10, "Grammatical Relation - Quan hệ văn phạm", "="*10)
-    grammatical_relation = GrammaticalRelation(malt_result)
+    grammatical_relation = GrammaticalRelationParser(malt_result)
     relations = grammatical_relation.get_relations()
     relations_txt = grammatical_relation.get_relations_txt()
     print(relations_txt)
@@ -48,5 +48,5 @@ def main(question):
 if __name__ == "__main__":
     argv = sys.argv[1:]
     question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
-    
+
     main(question)
