@@ -50,8 +50,8 @@ def main(question):
     print(malt_txt)
     write_file(PATH_TO_OUTPUT_FILES["a"], malt_txt)
 
-    # ================= B - ??? - Quan hệ ngữ nghĩa =================
-    print_header("B - ??? - Quan hệ ngữ nghĩa")
+    # ================= B - Semantic Relation - Quan hệ ngữ nghĩa =================
+    print_header("B - Semantic Relation - Quan hệ ngữ nghĩa")
     print()
 
     # ================= C - Grammatical Relation - Quan hệ văn phạm =================
