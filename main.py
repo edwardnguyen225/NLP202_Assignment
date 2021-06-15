@@ -70,6 +70,15 @@ def main(question):
     print(logical_form)
     write_file(PATH_TO_OUTPUT_FILES["d"], logical_form)
 
+    # ================= E - Procedure Semantics - Ngữ nghĩa thủ tục =================
+    print()
+    print_header("E - Procedure Semantics - Ngữ nghĩa thủ tục")
+    print()
+
+    # ================= F - The Result - Kết quả truy vấn =================
+    print_header("F - The Result - Kết quả truy vấn")
+    print()
+
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
