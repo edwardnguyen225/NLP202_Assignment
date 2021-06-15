@@ -5,13 +5,13 @@ PRED = "PRED"
 
 
 class RelationPRED():
-    def __init__(self, var, pred):
+    def __init__(self, var, predicate):
         self.relation_name = PRED
         self.var = var
-        self.pred = pred
+        self.predicate = predicate
 
     def __str__(self):
-        str = f'({self.var} {PRED} {self.pred})'
+        str = f'({self.var} {PRED} {self.predicate})'
         return str
 
 
