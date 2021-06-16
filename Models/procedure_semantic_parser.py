@@ -1,4 +1,4 @@
-from Models.data import WHS
+from Models.data import GAP, WHS
 
 
 WH_TO_PROC_SEM = {
@@ -30,7 +30,10 @@ class BaseTime(Bus):
         self.set_hour(hour)
 
     def __str__(self):
-        return f'({self.bus_code} {self.place} {self.hour})'
+        place = self.place
+        if self.place is None or self.place == GAP:
+            place = "?c"
+        return f'({self.bus_code} {place} {self.hour})'
 
     def set_place(self, place):
         self.place = place if place else "?c"
@@ -50,7 +53,7 @@ class Dtime(BaseTime):
         super().__init__(bus_code, departure, hour)
 
     def __str__(self):
-        return f'(DTIME {self.bus_code} {self.place} {self.hour})'
+        return super().__str__().replace("(", "(DTIME ")
 
 
 class Atime(BaseTime):
@@ -58,7 +61,7 @@ class Atime(BaseTime):
         super().__init__(bus_code, destination, hour)
 
     def __str__(self):
-        return f'(ATIME {self.bus_code} {self.place} {self.hour})'
+        return super().__str__().replace("(", "(ATIME ")
 
 
 class ProcedureSemanticParser():
@@ -72,7 +75,7 @@ class ProcedureSemanticParser():
 
     def set_procedure_semantic(self):
         for relation in self.logical_relations:
-            if relation.relation_name == "BUS-NP":
+            if relation.relation_name == "AGENT":
                 bus_code = relation.child.word
                 self.bus.set_bus_code(bus_code)
                 self.dtime.set_bus_code(bus_code)
