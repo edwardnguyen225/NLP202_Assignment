@@ -51,7 +51,7 @@ class LogicalParser():
         self.variables = variables
         self.logical_relations = LogicalParser.gramma_to_logical_relations(
             grammatical_relations)
-        self.logical_form = self.set_logical_form()
+        self.logical_form_str = self.set_logical_form()
 
     def get_relations(self):
         return self.logical_relations
@@ -67,7 +67,7 @@ class LogicalParser():
                 continue
             relation_str = str(relation)
             length = len(relation_str)
-            relation_str = "[" + relation_str[1:length - 1] + "]"
+            relation_str = "\n\t[" + relation_str[1:length - 1] + "]"
             logical_form += relation_str
 
         logical_form = f'({logical_form})'
@@ -77,7 +77,7 @@ class LogicalParser():
         return logical_form
 
     def get_logical_form(self):
-        return self.logical_form
+        return self.logical_form_str
 
     @staticmethod
     def gramma_to_logical_relations(grammatical_relations):
