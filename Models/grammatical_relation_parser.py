@@ -240,7 +240,6 @@ class GrammaticalRelationParser():
                 if relation.relation_name in ["FROM-LOC", "TO-LOC"] and relation.child.relation_name != "CITY-NAME":
                     count += 1
                     var = f'c{count}'
-                    print(var)
                     city = RelationBase("CITY-NAME", var, GAP)
                     relation.child = city
 
