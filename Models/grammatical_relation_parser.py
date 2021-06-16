@@ -131,6 +131,8 @@ class GrammaticalRelationParser():
                     relations.pop(0)
                 else:
                     relation_tup = (predicate, relation_tup[1])
+            elif relation_name in ["FROM-LOC", "TO-LOC"]:
+                relation_tup = (predicate, relation_tup[1])
             elif relation_name in ["FROM-TIME", "TO-TIME"]:
                 next_relation_tup = relations[0]
                 next_relation_name = malt[next_relation_tup]
@@ -225,11 +227,11 @@ class GrammaticalRelationParser():
             lsubj_relation.child = bus_code_relation
 
             copied_gramma_relations.pop(bus_np_relation_index)
-
-        if wh_query == "WH-BUS":
+        else:
             child = RelationBase("BUS-CODE", lsubj_relation.child.var, GAP)
             lsubj_relation.child = child
-        elif wh_query == "WH-CITY":
+
+        if wh_query == "WH-CITY":
             for relation in gramma_relations:
                 count = 0
                 for variable in self.variables.values():
