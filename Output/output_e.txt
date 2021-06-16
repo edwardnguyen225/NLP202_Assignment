@@ -1,0 +1,1 @@
+(PRINT-BUS ?b (BUS ?b)(ATIME ?b Huế 19:00HR)(DTIME ?b Hồ_Chí_Minh 10:00HR))
