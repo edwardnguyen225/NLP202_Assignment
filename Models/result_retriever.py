@@ -8,6 +8,9 @@ NO_BUS_FOUND = "Không tìm được xe bus thỏa điều kiện đã cho!"
 NO_CITY_FOUND = "Không tìm được thành phố/tỉnh"
 NOT_SET_RUN_TIME = "Thời gian chạy chưa được cài đặt"
 WRONG_BUS_SRC_DEST = "Sai địa điểm khởi hành/kết thúc của xe bus"
+SOMETHING_WRONG = "Lỗi thông tin xe bus"
+SOMETHING_WRONG_WHEN_GET_SRC = SOMETHING_WRONG + " khi tìm nơi khởi hành"
+SOMETHING_WRONG_WHEN_GET_DEST = SOMETHING_WRONG + " khi tìm nơi đến"
 
 
 def create_dummy_bus(condition):
@@ -93,7 +96,7 @@ class ResultRetriever():
     def get_buses(self):
         result = []
         dummy_bus = create_dummy_bus(self.condition)
-        
+
         for bus in BUS_DATA.values():
             if dummy_bus.compare_real_bus(bus) == True:
                 result.append(bus.bus_code)
@@ -131,10 +134,40 @@ class ResultRetriever():
         return result if result else NO_CITY_FOUND
 
     def get_src(self):
-        result = "GETTING SOURCE"
-        return result
+        dummy_bus = create_dummy_bus(self.condition)
+        bus_code = self.condition["bus"]
+
+        if bus_code == GAP:
+            buses = self.get_buses()
+            result = []
+            for bus_code in buses:
+                real_bus = BUS_DATA[bus_code]
+                if dummy_bus.compare_real_bus(real_bus):
+                    result.append(real_bus.dest)
+            return result if result else SOMETHING_WRONG_WHEN_GET_SRC
+        elif bus_code != None and bus_code not in BUS_DATA:
+            return NO_BUS_FOUND
+        elif bus_code in BUS_DATA:
+            real_bus = BUS_DATA[bus_code]
+            if dummy_bus.compare_real_bus(real_bus):
+                return real_bus.src
+        return SOMETHING_WRONG_WHEN_GET_SRC
 
     def get_dest(self):
-        result = "GETTING DESTINATION"
-
-        return result
+        dummy_bus = create_dummy_bus(self.condition)
+        bus_code = self.condition["bus"]
+        if bus_code == GAP:
+            buses = self.get_buses()
+            result = []
+            for bus_code in buses:
+                real_bus = BUS_DATA[bus_code]
+                if dummy_bus.compare_real_bus(real_bus):
+                    result.append(real_bus.dest)
+            return result if result else SOMETHING_WRONG_WHEN_GET_SRC
+        elif bus_code != None and bus_code not in BUS_DATA:
+            return NO_BUS_FOUND
+        elif bus_code in BUS_DATA:
+            real_bus = BUS_DATA[bus_code]
+            if dummy_bus.compare_real_bus(real_bus):
+                return real_bus.dest
+        return SOMETHING_WRONG_WHEN_GET_DEST
