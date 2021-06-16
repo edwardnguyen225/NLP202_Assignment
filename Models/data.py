@@ -17,7 +17,9 @@ DEFAULT_QUESTIONS = {
     "Xe bus nào đến từ HCMC ?": ["B1", "B2"],
     "Xe bus B3 đến từ thành phố nào ?": "Đà Nẵng",
     "Xe bus B3 từ Đà Nẵng đến Huế lúc nào ?": "20:00HR",
+    "Xe bus B5 từ Đà Nẵng lúc 5:30HR đến thành phố nào ?": "Hà Nội",
     "Xe bus từ Đà Nẵng lúc 5:30HR đến thành phố nào ?": "Hà Nội",
+    "Xe bus từ Đà Nẵng đến thành phố nào ?": ['Huế', 'Hà Nội', 'Hồ Chí Minh'],
 }
 
 REDUNDANT_TOKENS = [".", ",", "?", ":"]
