@@ -1,4 +1,4 @@
-import os
+from Models.procedure_semantic_parser import ProcedureSemanticParser
 import sys
 import random
 
@@ -67,13 +67,16 @@ def main(question):
     variables = grammatical_relation.get_variables()
     logical_parser = LogicalParser(gramma_relations, variables)
     logical_form = logical_parser.get_logical_form()
-    print(logical_form)
+    print(logical_form, "\n")
     write_file(PATH_TO_OUTPUT_FILES["d"], logical_form)
 
     # ================= E - Procedure Semantics - Ngữ nghĩa thủ tục =================
-    print()
     print_header("E - Procedure Semantics - Ngữ nghĩa thủ tục")
-    print()
+    logical_relations = logical_parser.get_relations()
+    proc_sem_parser = ProcedureSemanticParser(logical_relations)
+    proc_sem_txt = proc_sem_parser.get_procedure_semantic_txt()
+    print(proc_sem_txt, "\n")
+    write_file(PATH_TO_OUTPUT_FILES["e"], proc_sem_txt)
 
     # ================= F - The Result - Kết quả truy vấn =================
     print_header("F - The Result - Kết quả truy vấn")
