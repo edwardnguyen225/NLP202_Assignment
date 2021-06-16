@@ -14,7 +14,10 @@ class Bus():
         self.set_bus_code(bus_code)
 
     def __str__(self):
-        return f'(BUS {self.bus_code})'
+        bus_code = self.bus_code
+        if self.bus_code is None or self.bus_code == GAP:
+            bus_code = "?b"
+        return f'(BUS {bus_code})'
 
     def set_bus_code(self, bus_code):
         self.bus_code = bus_code if bus_code else "?b"
@@ -33,7 +36,10 @@ class BaseTime(Bus):
         place = self.place
         if self.place is None or self.place == GAP:
             place = "?c"
-        return f'({self.bus_code} {place} {self.hour})'
+        bus_code = self.bus_code
+        if self.bus_code is None or self.bus_code == GAP:
+            bus_code = "?b"
+        return f'({bus_code} {place} {self.hour})'
 
     def set_place(self, place):
         self.place = place if place else "?c"
