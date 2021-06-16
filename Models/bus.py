@@ -69,15 +69,16 @@ class Bus():
         except:
             return False
 
+WORD_FOR_NONE = [GAP, "?"]
 
 class DummyBus(Bus):
     def __init__(self, bus_code=None, src=None, dtime=None, dest=None, atime=None, runtime=None):
-        self.bus_code = bus_code if bus_code is not None and bus_code != GAP and bus_code != "?" else None
-        super().set_src(src) if src != GAP else super().set_src(None)
-        super().set_dtime(dtime) if dtime != GAP else super().set_dtime(None)
-        super().set_dest(dest) if dest != GAP else super().set_dest(None)
-        super().set_atime(atime) if atime != GAP else super().set_atime(None)
-        super().set_runtime(runtime) if runtime != GAP else super().set_runtime(None)
+        self.bus_code = bus_code if bus_code is not None and bus_code not in WORD_FOR_NONE else None
+        super().set_src(src) if src not in WORD_FOR_NONE else super().set_src(None)
+        super().set_dtime(dtime) if dtime not in WORD_FOR_NONE else super().set_dtime(None)
+        super().set_dest(dest) if dest not in WORD_FOR_NONE else super().set_dest(None)
+        super().set_atime(atime) if atime not in WORD_FOR_NONE else super().set_atime(None)
+        super().set_runtime(runtime) if runtime not in WORD_FOR_NONE else super().set_runtime(None)
 
     def __str__(self):
         str = f'Dummy_bus {self.bus_code} from {self.src} ({self.dtime}) to {self.dest} ({self.atime}) in {self.runtime}'
