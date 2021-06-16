@@ -23,7 +23,10 @@ def fix_time_mode(tokens):
     for i in range(len(tokens_result)):
         if get_token_type(tokens_result[i]) == TIME_MODE:
             token = tokens_result[i]
-            token = f'{token[0:2]}:{token[2:]}'
+            if len(token) == 5:
+                token = f'{token[0:1]}:{token[1:]}'
+            elif len(token) == 6:
+                token = f'{token[0:2]}:{token[2:]}'
             tokens_result[i] = token
     return tokens_result
 
