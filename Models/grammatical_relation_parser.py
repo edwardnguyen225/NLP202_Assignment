@@ -1,6 +1,7 @@
+from re import sub
 from Models.malt_parser import MaltParser
 from copy import copy
-from Models.data import ROOT, WHS, get_token_type
+from Models.data import GAP, ROOT, WHS, get_token_type
 
 PRED = "PRED"
 
@@ -197,4 +198,48 @@ class GrammaticalRelationParser():
 
                 if relation:
                     relations_output.append(relation)
+        relations_output = self.replace_with_GAP(relations_output)
         return relations_output
+
+    def replace_with_GAP(self, gramma_relations):
+        copied_gramma_relations = copy(gramma_relations)
+        wh_query = None
+        lsubj_relation = None
+        bus_np_relation = None
+        for i in range(len(gramma_relations)):
+            relation = gramma_relations[i]
+            if relation.relation_name in WHS:
+                wh_query = relation.relation_name
+            elif relation.relation_name == "LSUBJ":
+                lsubj_relation = relation
+            elif relation.relation_name == "BUS-NP":
+                bus_np_relation = relation
+                bus_np_relation_index = i
+
+        if bus_np_relation is not None:
+            bus_code_relation = bus_np_relation.child
+            bus_code_relation.var = bus_code_relation.word.lower()
+            del self.variables[lsubj_relation.child.word]
+            self.variables[bus_code_relation.word] = bus_code_relation.var
+
+            lsubj_relation.child = bus_code_relation
+
+            copied_gramma_relations.pop(bus_np_relation_index)
+
+        if wh_query == "WH-BUS":
+            child = RelationBase("BUS-CODE", lsubj_relation.child.var, GAP)
+            lsubj_relation.child = child
+        elif wh_query == "WH-CITY":
+            for relation in gramma_relations:
+                count = 0
+                for variable in self.variables.values():
+                    if variable[0:1] == "c":
+                        count += 1
+                if relation.relation_name in ["FROM-LOC", "TO-LOC"] and relation.child.relation_name != "CITY-NAME":
+                    count += 1
+                    var = f'c{count}'
+                    print(var)
+                    city = RelationBase("CITY-NAME", var, GAP)
+                    relation.child = city
+
+        return copied_gramma_relations
