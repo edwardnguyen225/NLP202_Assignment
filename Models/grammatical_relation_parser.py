@@ -122,7 +122,7 @@ class GrammaticalRelationParser():
             if relation_name == "PREP":
                 continue
 
-            if relation_name in ["FROM-LOC", "TO-LOC"] and relation_tup[0] != predicate:
+            if relation_name in ["FROM-LOC", "TO-LOC"] and len(relations) > 0:
                 next_relation_tup = relations[0]
                 next_relation_name = malt[next_relation_tup]
                 if next_relation_name in ["CITY-NP"]:
