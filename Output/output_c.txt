@@ -2,7 +2,6 @@
 (s1 LSUBJ (BUS b1 Xe_bus))
 (s1 FROM-LOC (CITY-NAME c1 Hồ_Chí_Minh))
 (s1 FROM-TIME (TIME-MODE t1 10:00HR))
-(s1 TO-LOC (CITY s2 thành_phố))
+(s1 TO-LOC (CITY-NAME c2 Huế))
 (s1 TO-TIME (TIME-MODE t2 19:00HR))
 (b1 WH-BUS)
-(s2 CITY-NP (CITY-NAME c2 Huế))
