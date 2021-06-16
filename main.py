@@ -1,3 +1,4 @@
+from Models.result_retriever import ResultRetriever
 from Models.procedure_semantic_parser import ProcedureSemanticParser
 import sys
 import random
@@ -38,6 +39,7 @@ def print_header(header):
 
 
 def main(question):
+    print(HORIZONTAL_BAR)
     print("Your question: " + question + "\n")
 
     # ================= A - Malt Parser - Phân tích cú pháp phụ thuộc =================
@@ -51,8 +53,8 @@ def main(question):
     write_file(PATH_TO_OUTPUT_FILES["a"], malt_txt)
 
     # ================= B - Semantic Relation - Quan hệ ngữ nghĩa =================
-    print_header("B - Semantic Relation - Quan hệ ngữ nghĩa")
-    print()
+    # print_header("B - Semantic Relation - Quan hệ ngữ nghĩa")
+    # print()
 
     # ================= C - Grammatical Relation - Quan hệ văn phạm =================
     print_header("C - Grammatical Relation - Quan hệ văn phạm")
@@ -80,16 +82,22 @@ def main(question):
 
     # ================= F - The Result - Kết quả truy vấn =================
     print_header("F - The Result - Kết quả truy vấn")
-    print()
+    proc_sem = proc_sem_parser.get_procedure_semantic()
+    result_retriever = ResultRetriever(proc_sem)
+    result = result_retriever.get_result()
+    print("Result (Kết quả):", result)
+    return result  # For testing purpose
 
 
 if __name__ == "__main__":
-    argv = sys.argv[1:]
-    question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
-    main(question)
-
-    # question = DEFAULT_QUESTIONS[0]
+    # argv = sys.argv[1:]
+    # question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
     # main(question)
+
+    question = list(DEFAULT_QUESTIONS.keys())[8]
+    result = main(question)
+    print("RESULT FROM DATA:", DEFAULT_QUESTIONS[question])
+    print("COMPARING:", result == DEFAULT_QUESTIONS[question])
 
     # for ques in DEFAULT_QUESTIONS:
     #     main(ques)
