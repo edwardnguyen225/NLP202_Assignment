@@ -95,8 +95,23 @@ def main(question):
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
-    question = random.choice(list(DEFAULT_QUESTIONS.keys())) if (
-        len(argv) < 1) else argv
+    question_list = list(DEFAULT_QUESTIONS.keys())
+    exit_code = False
+    if len(argv) > 0:
+        argv_0 = argv[0]
+        try:
+            num = int(argv_0)
+            if num not in range(len(question_list)):
+                print(f"Number input is out of index, must be between 0 and {len(question_list) - 1}")
+                exit_code = True
+            question = question_list[num]
+        except:
+            question = argv_0
+    else:
+        question = random.choice(question_list)
+
+    if exit_code == True:
+        exit(0)
     main(question)
 
     # question = list(DEFAULT_QUESTIONS.keys())[0]
