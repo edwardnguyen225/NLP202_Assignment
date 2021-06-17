@@ -11,7 +11,7 @@ DEFAULT_QUESTIONS = {
     "Xe bus nào đến thành phố Huế lúc 20:00HR ?": ["B3"],
     "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?": "4:00HR",
     "Thời gian xe bus B4 từ Đà Nẵng đến Huế ?": "Sai địa điểm khởi hành/kết thúc của xe bus B4",
-    "Thời gian xe bus từ Huế đến Hanoi ?": ["16:00HR"],
+    "Thời gian xe bus từ Huế đến Hanoi ?": "16:00HR",
     "Xe bus nào đến thành phố Hồ Chí Minh ?": ["B4"],
     "Xe bus nào đến HUE ?": ["B1", "B3", "B2"],
     "Xe bus nào đến từ HCMC ?": ["B1", "B2"],
