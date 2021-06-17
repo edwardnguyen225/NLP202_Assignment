@@ -1,5 +1,5 @@
 (s1 PRED đến)
-(s1 LSUBJ (BUS b1 Xe_bus))
+(s1 LSUBJ (BUS-CODE b1 <GAP>))
 (s1 FROM-LOC (CITY-NAME c1 Hồ_Chí_Minh))
 (s1 FROM-TIME (TIME-MODE t1 10:00HR))
 (s1 TO-LOC (CITY-NAME c2 Huế))
