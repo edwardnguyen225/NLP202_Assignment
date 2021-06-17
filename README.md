@@ -124,7 +124,7 @@ Kết quả khi chạy thử
 python main.py "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?"
 ```
 
-!(Chạy thử "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?")(./Images/Test_01.png)
+![Chạy thử "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?"](./Images/Test_01.png)
 
 Kết quả khi chạy thử
 
@@ -132,7 +132,7 @@ Kết quả khi chạy thử
 python main.py "Xe bus nào đến thành phố Hồ Chí Minh ?"
 ```
 
-!(Chạy thử "Xe bus nào đến thành phố Hồ Chí Minh ?")(./Images/Test_02.png)
+![Chạy thử "Xe bus nào đến thành phố Hồ Chí Minh ?"](./Images/Test_02.png)
 
 Kết quả khi chạy thử ngẫu nhiên
 
@@ -140,4 +140,4 @@ Kết quả khi chạy thử ngẫu nhiên
 python main.py
 ```
 
-!(Chạy thử random)(./Images/Test_03.png)
+![Chạy thử random](./Images/Test_03.png)
