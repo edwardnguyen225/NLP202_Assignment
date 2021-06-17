@@ -94,6 +94,15 @@ class ResultRetriever():
     def get_result(self):
         return self.result
 
+    def get_result_str(self):
+        if isinstance(self.result, str):
+            return self.result
+        result = "["
+        for i in range(len(self.result)):
+            result += self.result[i]
+            result += ", " if i + 1 < len(self.result) else "]"
+        return result
+
     def get_buses(self):
         result = []
         dummy_bus = create_dummy_bus(self.condition)
