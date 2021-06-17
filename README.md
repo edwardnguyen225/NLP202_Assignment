@@ -101,3 +101,23 @@ Kết quả truy vấn (file [output_f.txt](./Output/output_f.txt))
 ```
 
 ![Kết quả](./Images/Test_00.png)
+
+## Các hình ảnh chạy thử khác
+
+Kết quả khi chạy thử
+```bash
+python main.py "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?"
+```
+!(Chạy thử "Thời gian xe bus B3 từ Đà Nẵng đến Huế ?")(./Images/Test_01.png)
+
+Kết quả khi chạy thử
+```bash
+python main.py "Xe bus nào đến thành phố Hồ Chí Minh ?"
+```
+!(Chạy thử "Xe bus nào đến thành phố Hồ Chí Minh ?")(./Images/Test_02.png)
+
+Kết quả khi chạy thử ngẫu nhiên
+```bash
+python main.py
+```
+!(Chạy thử random)(./Images/Test_03.png)
