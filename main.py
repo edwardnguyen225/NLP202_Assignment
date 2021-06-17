@@ -77,7 +77,8 @@ def main(question):
     logical_relations = logical_parser.get_relations()
     proc_sem_parser = ProcedureSemanticParser(logical_relations)
     proc_sem_txt = proc_sem_parser.get_procedure_semantic_txt()
-    print(proc_sem_txt, "\n")
+    proc_sem_txt += "\n"
+    print(proc_sem_txt)
     write_file(PATH_TO_OUTPUT_FILES["e"], proc_sem_txt)
 
     # ================= F - The Result - Kết quả truy vấn =================
@@ -86,21 +87,28 @@ def main(question):
     result_retriever = ResultRetriever(proc_sem)
     result = result_retriever.get_result()
     print("Result (Kết quả):", result)
+    result_str = result_retriever.get_result_str() + "\n"
+    write_file(PATH_TO_OUTPUT_FILES["f"], result_str)
+
     return result  # For testing purpose
 
 
 if __name__ == "__main__":
-    # argv = sys.argv[1:]
-    # question = random.choice(DEFAULT_QUESTIONS) if (len(argv) < 1) else argv
-    # main(question)
+    argv = sys.argv[1:]
+    question = random.choice(list(DEFAULT_QUESTIONS.keys())) if (
+        len(argv) < 1) else argv
+    main(question)
 
-    question = list(DEFAULT_QUESTIONS.keys())[8]
-    result = main(question)
-    print("RESULT FROM DATA:", DEFAULT_QUESTIONS[question])
-    print("COMPARING:", result == DEFAULT_QUESTIONS[question])
+    # question = list(DEFAULT_QUESTIONS.keys())[0]
+    # result = main(question)
+    # print("RESULT FROM DATA:", DEFAULT_QUESTIONS[question])
+    # print("COMPARING:", result == DEFAULT_QUESTIONS[question])
 
-    # for ques in DEFAULT_QUESTIONS:
-    #     main(ques)
+    # for question in DEFAULT_QUESTIONS:
+    #     result = main(question)
+    #     if result != DEFAULT_QUESTIONS[question]:
+    #         raise Exception("ERROR:", question,
+    #                         f'{result} != {DEFAULT_QUESTIONS[question]}')
 
-    print("\n" + HORIZONTAL_BAR)
-    print("PROGRAM RUN SUCCESSFULLY WITHOUT ANY BUG 🍻")
+    # print("\n" + HORIZONTAL_BAR)
+    # print("PROGRAM RUN SUCCESSFULLY WITHOUT ANY BUG 🍻")
