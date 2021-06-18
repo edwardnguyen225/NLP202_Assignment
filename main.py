@@ -2,7 +2,7 @@
 #
 # Đại học Bách Khoa TPHCM
 # Author: Nguyễn Trí Nhân
-# Date finish: 06/19/2021
+# Date finish: 06/18/2021
 #
 ##############################################################
 
