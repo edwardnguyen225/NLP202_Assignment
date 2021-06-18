@@ -1,3 +1,11 @@
+##############################################################
+#
+# Đại học Bách Khoa TPHCM
+# Author: Nguyễn Trí Nhân
+# Date finish: 06/19/2021
+#
+##############################################################
+
 from Models.result_retriever import ResultRetriever
 from Models.procedure_semantic_parser import ProcedureSemanticParser
 import sys
